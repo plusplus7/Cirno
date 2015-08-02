@@ -28,27 +28,19 @@ class BlogIndexHandler(tornado.web.RequestHandler):
         prev = """<article id="52" class="post tag-laravel-5-1 tag-artisan">
 
         <div class="post-head">
-        <h1 class="post-title"><a href="/post/install-and-run-laravel-5-x-on-windows/">在 Windows 上快速安装并运行 Laravel 5.x</a></h1>
+        <h1 class="post-title"><a href="/post/asdf/">云服务器ECS</a></h1>
         <div class="post-meta">
-        <span class="author">作者：<a href="/author/wangsai/">王赛</a></span> •
-        <time class="post-date" datetime="2015年6月26日星期五下午4点15" title="2015年6月26日星期五下午4点15">2015年6月26日</time>
+        <span class="author">作者：<a href="plusplus7.com/blog">plusplus7</a></span> •
+        <time class="post-date" datetime="2015年6月26日星期五下午4点15" title="2015年6月26日星期五下午4点15">2015.06.26</time>
         </div>
         </div>
         <div class="post-content">
-        <p>安装 PHP   注意一：Laravel 5.0 开始对 PHP 版本的要求是 &gt;=5.4，Laravel 5.1 要求 PHP 版本 &gt;=5.5.9，所以，建议大家尽量安装 5.5.x 的最新版本，写此文章时，最新版本是 5.5.27。        注意二：PHP 5.4 是最后一个支持 Windows</p>
+        <p> 云服务器（Elastic Compute Service 简称ECS）是一种简单高效，处理能力可弹性伸缩的计算服务助您快速构建更稳定、安全的应用。提升运维效率，降低IT成本，使您更专注于核心业务创新</p>
         </div>
         <div class="post-permalink">
-        <a href="/post/install-and-run-laravel-5-x-on-windows/" class="btn btn-default">阅读全文</a>
+        <a href="/post/asdf/" class="btn btn-default">阅读全文</a>
         </div>
 
-        <footer class="post-footer clearfix">
-        <div class="pull-left tag-list">
-        <i class="fa fa-folder-open-o"></i>
-        <a href="/tag/laravel-5-1/">Laravel 5.1</a>, <a href="/tag/artisan/">Artisan</a>
-        </div>
-        <div class="pull-right share">
-        </div>
-        </footer>
         </article>"""
         prev_list.append(prev)
 
