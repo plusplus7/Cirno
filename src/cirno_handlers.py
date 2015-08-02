@@ -7,7 +7,6 @@ class IndexHandler(tornado.web.RequestHandler):
 
 class BlogIndexHandler(tornado.web.RequestHandler):
     def get(self, area_id = "index"):
-        print area_id
         area_list = []
         area = {}
         area2 = {}
