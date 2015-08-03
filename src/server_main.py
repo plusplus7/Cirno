@@ -7,6 +7,8 @@ urls = [
     (r'/', IndexHandler),
     (r'/blog', BlogIndexHandler),
     (r'/blog/(?P<area_id>[a-zA-Z0-9-_]+)', BlogIndexHandler),
+    (r'/blog/post/(?P<post_id>[a-zA-Z0-9-_]+)', BlogMainHandler),
+    (r'/nimda', AdminMainHandler),
    # (r'/storage', StorageIndexHandler),
    # (r'/aboutme', AboutmeIndexHandler),
 ]

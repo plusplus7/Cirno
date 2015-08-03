@@ -1,0 +1,134 @@
+{% autoescape None %}
+<html>
+ <head> 
+ {% include "header.html" %}
+ {% include "header_css.html" %}
+ </head> 
+ <body class="home-template"> 
+  <header class="main-header"> 
+   <div class="container"> 
+    <div class="row"> 
+     <div class="col-sm-12"> 
+      <h1>plusplus7's blog</h1>  
+      <h3>Life is tough, take it easy : )</h3> 
+     </div> 
+    </div> 
+   </div> 
+  </header> 
+  <nav class="main-navigation"> 
+   <div class="container"> 
+    <div class="row"> 
+     <div class="col-sm-12"> 
+      <div class="navbar-header"> 
+       <span class="nav-toggle-button collapsed" data-toggle="collapse" data-target="#main-menu"> <span class="sr-only">Toggle navigation</span> <i class="fa fa-bars"></i> </span> 
+      </div> 
+      <div class="collapse navbar-collapse" id="main-menu"> 
+       <ul class="menu"> 
+       {% for top in top_list %}
+        {% if top['current'] == True %}
+         <li class="nav-current" role="presentation"><a href="./blog/area/{{ top['id'] }}">{{ top['name'] }}</a></li> 
+        {% else %}
+         <li role="presentation"><a href="./blog/area/{{ top['id'] }}">{{ top['name'] }}</a></li> 
+        {% end %}
+       {% end %}
+       </ul> 
+      </div> 
+     </div> 
+    </div> 
+   </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <aside class="col-md-3 sidebar">
+        <div class="widget">
+         <h4 class="title"> 追忆の神殿 </h4>
+          <div class="content community">
+              <p id="p_add_post"><a href="#"> 添加文章 </a></p>
+              <p id="p_add_area"><a href="#"> 添加分类 </a></p>
+          </div>
+        </div>
+        <div class="widget">
+         <h4 class="title"> 圣光之灵 </h4>
+          <div class="content community">
+              <p><a id="p_manage_area"> 管理分类 </a></p>
+              <p><a id="p_manage_user"> 管理账号 </a></p>
+          </div>
+        </div>
+      </aside>
+      <main id="main" class="col-md-9 main-content">
+        <div id="m_add_post" class="panel panel-default">
+          <div class="panel-body">
+            <form method="post" action="./nimda/add_post">
+              <div class="form-group">
+                <label class="control-label" for="inputSuccess1">文章概览</label>
+                <textarea class="form-control" rows="2"></textarea>
+              </div>
+               <div class="form-group">
+                <button type="button" class="btn">预览</button>
+               </div>
+              <div class="form-group">
+              <label class="control-label" for="inputSuccess1">文章分类</label>
+              <select class="form-control">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select>
+              </div>
+              <div class="form-group">
+              <label class="control-label" for="inputSuccess1">文章正文</label>
+              <textarea class="form-control" rows="5"></textarea>
+              </div>
+              <div class="form-group">
+                <button type="button" class="btn">预览</button>
+               </div>
+               <div class="form-group">
+                <label for="exampleInputPassword1">身份验证码</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+              </div>
+              <div class="form-group">
+                <button type="button" class="btn btn-danger">提交</button>
+               </div>
+            </form>
+          </div>
+        </div>
+        <div id="m_add_area" class="panel panel-default">
+          <div class="panel-body">
+            2www.asdfsadfasdf.com
+          </div>
+        </div>
+        <div id="m_manage_area" class="panel panel-default">
+          <div class="panel-body">
+            3www.asdfsadfasdf.com
+          </div>
+        </div>
+        <div id="m_manage_user" class="panel panel-default">
+          <div class="panel-body">
+            4www.asdfsadfasdf.com
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  {% include "footer_line.html" %}
+  {% include "footer_js.html" %}
+  {% include "latex_js.html" %}
+  <script type="text/javascript">
+   $(document).ready(function() {
+      $("#p_add_post").click(function() {
+          $("#m_add_post").fadeToggle();
+      });
+      $("#p_add_area").click(function() {
+          $("#m_add_area").fadeToggle();
+      });
+      $("#p_manage_area").click(function() {
+          $("#m_manage_area").fadeToggle();
+      });
+      $("#p_manage_user").click(function() {
+          $("#m_manage_user").fadeToggle();
+      });
+   });
+  </script>
+ </body>
+</html>
