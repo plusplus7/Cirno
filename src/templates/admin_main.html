@@ -43,15 +43,19 @@
         <div class="widget">
          <h4 class="title"> 追忆の神殿 </h4>
           <div class="content community">
-              <p id="p_add_post"><a href="#"> 添加文章 </a></p>
-              <p id="p_add_area"><a href="#"> 添加分类 </a></p>
+            <div class="list-group">
+              <p><a id="p_add_post" class="list-group-item active"> 添加文章 </a></p>
+              <p><a id="p_add_area" class="list-group-item"> 添加分类 </a></p>
+            </div>
           </div>
         </div>
         <div class="widget">
          <h4 class="title"> 圣光之灵 </h4>
           <div class="content community">
-              <p><a id="p_manage_area"> 管理分类 </a></p>
-              <p><a id="p_manage_user"> 管理账号 </a></p>
+          <div class="list-group">
+              <p><a id="p_manage_area" class="list-group-item"> 管理分类 </a></p>
+              <p><a id="p_manage_user" class="list-group-item"> 管理账号 </a></p>
+              </div>
           </div>
         </div>
       </aside>
@@ -115,18 +119,43 @@
   {% include "footer_js.html" %}
   {% include "latex_js.html" %}
   <script type="text/javascript">
+  var p_active_now = "#p_add_post";
+  var m_active_now = "#m_add_post";
+  $("#m_add_area").hide();
+  $("#m_manage_area").hide();
+  $("#m_manage_user").hide();
    $(document).ready(function() {
       $("#p_add_post").click(function() {
-          $("#m_add_post").fadeToggle();
+          $(m_active_now).fadeToggle();
+          $(p_active_now).removeClass("active");
+          p_active_now = "#p_add_post";
+          m_active_now = "#m_add_post";
+          $(m_active_now).fadeToggle();
+          $(p_active_now).addClass("active");
       });
       $("#p_add_area").click(function() {
-          $("#m_add_area").fadeToggle();
+          $(m_active_now).fadeToggle();
+          $(p_active_now).removeClass("active");
+          p_active_now = "#p_add_area";
+          m_active_now = "#m_add_area";
+          $(m_active_now).fadeToggle();
+          $(p_active_now).addClass("active");
       });
       $("#p_manage_area").click(function() {
-          $("#m_manage_area").fadeToggle();
+          $(m_active_now).fadeToggle();
+          $(p_active_now).removeClass("active");
+          p_active_now = "#p_manage_area";
+          m_active_now = "#m_manage_area";
+          $(m_active_now).fadeToggle();
+          $(p_active_now).addClass("active");
       });
       $("#p_manage_user").click(function() {
-          $("#m_manage_user").fadeToggle();
+          $(m_active_now).fadeToggle();
+          $(p_active_now).removeClass("active");
+          p_active_now = "#p_manage_user";
+          m_active_now = "#m_manage_user";
+          $(m_active_now).fadeToggle();
+          $(p_active_now).addClass("active");
       });
    });
   </script>
