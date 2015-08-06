@@ -73,6 +73,54 @@ class BlogMainHandler(tornado.web.RequestHandler):
         post_list.append(post)
         self.render("blog_main.html", area_list = area_list, post_list = post_list, top_list = area_list)
 
+class StorageIndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        area_list = []
+        area = {}
+        area2 = {}
+        area3 = {}
+        area['current'] = True
+        area['id'] = "test_area_id"
+        area['name'] = r"生活日常"
+        area_list.append(area)
+        area2['current'] = False
+        area2['id'] = "test_area_id2"
+        area2['name'] = r"生活日常2"
+        area_list.append(area2)
+        area3['current'] = False
+        area3['id'] = "test_area_id3"
+        area3['name'] = "生活日常2"
+        area_list.append(area3)
+
+        post_list = []
+        post = "My article"
+        post_list.append(post)
+        self.render("404_page.html", area_list = area_list, post_list = post_list, top_list = area_list)
+
+class AboutmeIndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        area_list = []
+        area = {}
+        area2 = {}
+        area3 = {}
+        area['current'] = True
+        area['id'] = "test_area_id"
+        area['name'] = r"生活日常"
+        area_list.append(area)
+        area2['current'] = False
+        area2['id'] = "test_area_id2"
+        area2['name'] = r"生活日常2"
+        area_list.append(area2)
+        area3['current'] = False
+        area3['id'] = "test_area_id3"
+        area3['name'] = "生活日常2"
+        area_list.append(area3)
+
+        post_list = []
+        post = "My article"
+        post_list.append(post)
+        self.render("404_page.html", area_list = area_list, post_list = post_list, top_list = area_list)
+        
 class AdminMainHandler(tornado.web.RequestHandler):
     def get(self):
         area_list = []
