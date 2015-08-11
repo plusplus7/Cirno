@@ -35,29 +35,9 @@
   </nav>
   <div class="container">
     <div class="row">
-      <main class="col-md-8 main-content">
-       {% for prev in prev_list %}
-          {{ prev }}         
-       {% end %}
+      <main class="col-md-12 main-content">
+        {{ error_info }}
       </main>
-      <aside class="col-md-4 sidebar">
-        <div class="widget">
-         <h4 class="title">博客专栏</h4>
-          <div class="content community">
-            {% for side in side_list %}
-              <p><a href="/blog/area/{{ side['id'] }}"> {{ side['name'] }}</a></p>
-            {% end %}
-          </div>
-        </div>
-        <div class="widget">
-         <h4 class="title">所有分类</h4>
-          <div class="content community">
-            {% for area in area_list %}
-              <p><a href="/blog/area/{{ area['id'] }}"> {{ area['name'] }}</a></p>
-            {% end %}
-          </div>
-        </div>
-      </aside>
     </div>
   </div>
   {% include "footer_line.html" %}

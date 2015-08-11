@@ -1,148 +1,192 @@
 #-*- coding: UTF-8 -*-
+import json
 import tornado.web
+import tornado.gen
+import tornadoredis
+
+g_rclient = tornadoredis.Client()
+g_rclient.connect()
+
+def construct_renders(all_area_json):
+    area_list = []
+    side_list = []
+    top_list  = []
+    all_area_list = json.loads(all_area_json)
+
+    for area in all_area_list:
+        if area['type'] == 1:
+            top_list.append(area)
+        elif area['type'] == 0:
+            area_list.append(area)
+        elif area['type'] == -1:
+            side_list.append(area)
+    return (area_list, side_list, top_list)
 
 class IndexHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index.html")
 
 class BlogIndexHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    @tornado.gen.engine
     def get(self, area_id = "index"):
-        area_list = []
-        area = {}
-        area2 = {}
-        area3 = {}
-        area['current'] = True
-        area['id'] = "test_area_id"
-        area['name'] = r"生活日常"
-        area_list.append(area)
-        area2['current'] = False
-        area2['id'] = "test_area_id2"
-        area2['name'] = r"生活日常2"
-        area_list.append(area2)
-        area3['current'] = False
-        area3['id'] = "test_area_id3"
-        area3['name'] = "生活日常2"
-        area_list.append(area3)
-        prev_list = []
-        prev = """<article id="52" class="post tag-laravel-5-1 tag-artisan">
+        pipe = g_rclient.pipeline()
+        pipe.get('blog:arealist')
+        pipe.get('area:' + area_id)
+        all_area_json, area_info_json = yield tornado.gen.Task(pipe.execute)
+        (area_list, side_list, top_list) = construct_renders(all_area_json)
 
-        <div class="post-head">
-        <h1 class="post-title"><a href="./blog/post/asdf">云服务器ECS</a></h1>
-        <div class="post-meta">
-        <span class="author">作者：<a href="plusplus7.com/blog">plusplus7</a></span> •
-        <time class="post-date" datetime="2015年6月26日星期五下午4点15" title="2015年6月26日星期五下午4点15">2015.06.26</time>
-        </div>
-        </div>
-        <div class="post-content">
-        <p> 云服务器（Elastic Compute Service 简称ECS）是一种简单高效，处理能力可弹性伸缩的计算服务助您快速构建更稳定、安全的应用。提升运维效率，降低IT成本，使您更专注于核心业务创新</p>
-        </div>
-        <div class="post-permalink">
-        <a href="./blog/post/asdf" class="btn btn-default">阅读全文</a>
-        </div>
+        if area_info_json == None:
+            self.render("error_page.html", error_info = "该分类不存在", top_list = top_list)
+        area_info_list = json.loads(area_info_json)
+        for doc in area_info_list[0:5]:
+            pipe.get('prev:' + doc)
+        prev_list = yield tornado.gen.Task(pipe.execute)
+        print prev_list
 
-        </article>"""
-        prev_list.append(prev)
-
-        side_list = []
-        side_list.append(area)
-        side_list.append(area2)
-        side_list.append(area3)
-        self.render("blog_index.html", area_list = area_list, prev_list = prev_list, side_list = side_list, top_list = area_list)
+        self.render("blog_index.html", area_list = area_list, prev_list = prev_list, side_list = side_list, top_list = top_list)
 
 class BlogMainHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    @tornado.gen.engine
     def get(self, post_id):
-        area_list = []
-        area = {}
-        area2 = {}
-        area3 = {}
-        area['current'] = True
-        area['id'] = "test_area_id"
-        area['name'] = r"生活日常"
-        area_list.append(area)
-        area2['current'] = False
-        area2['id'] = "test_area_id2"
-        area2['name'] = r"生活日常2"
-        area_list.append(area2)
-        area3['current'] = False
-        area3['id'] = "test_area_id3"
-        area3['name'] = "生活日常2"
-        area_list.append(area3)
+        pipe = g_rclient.pipeline()
+        pipe.get('blog:arealist')
+        pipe.get('post:' + post_id)
+        all_area_json, post_code = yield tornado.gen.Task(pipe.execute)
+        (area_list, side_list, top_list) = construct_renders(all_area_json)
 
-        post_list = []
-        post = "My article"
-        post_list.append(post)
-        self.render("blog_main.html", area_list = area_list, post_list = post_list, top_list = area_list)
+        if post_code == None:
+            self.render("error_page.html", error_info = "该文章不存在", top_list = top_list)
+
+        self.render("blog_main.html", post_code = post_code, top_list = top_list)
 
 class StorageIndexHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    @tornado.gen.engine
     def get(self):
-        area_list = []
-        area = {}
-        area2 = {}
-        area3 = {}
-        area['current'] = True
-        area['id'] = "test_area_id"
-        area['name'] = r"生活日常"
-        area_list.append(area)
-        area2['current'] = False
-        area2['id'] = "test_area_id2"
-        area2['name'] = r"生活日常2"
-        area_list.append(area2)
-        area3['current'] = False
-        area3['id'] = "test_area_id3"
-        area3['name'] = "生活日常2"
-        area_list.append(area3)
+        pipe = g_rclient.pipeline()
+        pipe.get('blog:arealist')
+        [all_area_json,] = yield tornado.gen.Task(pipe.execute)
+        (area_list, side_list, top_list) = construct_renders(all_area_json)
 
-        post_list = []
-        post = "My article"
-        post_list.append(post)
-        self.render("404_page.html", area_list = area_list, post_list = post_list, top_list = area_list)
+        self.render("storage_index.html", top_list = top_list)
 
 class AboutmeIndexHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    @tornado.gen.engine
     def get(self):
-        area_list = []
-        area = {}
-        area2 = {}
-        area3 = {}
-        area['current'] = True
-        area['id'] = "test_area_id"
-        area['name'] = r"生活日常"
-        area_list.append(area)
-        area2['current'] = False
-        area2['id'] = "test_area_id2"
-        area2['name'] = r"生活日常2"
-        area_list.append(area2)
-        area3['current'] = False
-        area3['id'] = "test_area_id3"
-        area3['name'] = "生活日常2"
-        area_list.append(area3)
+        pipe = g_rclient.pipeline()
+        pipe.get('blog:arealist')
+        [all_area_json,] = yield tornado.gen.Task(pipe.execute)
+        (area_list, side_list, top_list) = construct_renders(all_area_json)
 
-        post_list = []
-        post = "My article"
-        post_list.append(post)
-        self.render("404_page.html", area_list = area_list, post_list = post_list, top_list = area_list)
+        self.render("about_me.html", top_list = top_list)
         
+class GetPostJsonHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    @tornado.gen.engine
+    def get(self, post_id):
+        pipe = g_rclient.pipeline()
+        pipe.get('post:' + post_id)
+        pipe.get('prev:' + post_id)
+        prevcode, postcode = yield tornado.gen.Task(pipe.execute)
+        self.finish(json.dumps({"prevcode" : prevcode, "postcode" : postcode}))
+
 class AdminMainHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    @tornado.gen.engine
     def get(self):
-        area_list = []
-        area = {}
-        area2 = {}
-        area3 = {}
-        area['current'] = True
-        area['id'] = "test_area_id"
-        area['name'] = r"生活日常"
-        area_list.append(area)
-        area2['current'] = False
-        area2['id'] = "test_area_id2"
-        area2['name'] = r"生活日常2"
-        area_list.append(area2)
-        area3['current'] = False
-        area3['id'] = "test_area_id3"
-        area3['name'] = "生活日常2"
-        area_list.append(area3)
+        pipe = g_rclient.pipeline()
+        pipe.get('blog:arealist')
+        pipe.get('game:arealist')
+        [all_blog_json, all_game_json] = yield tornado.gen.Task(pipe.execute)
+        (b_area_list, b_side_list, b_top_list) = construct_renders(all_blog_json)
+        (g_area_list, g_side_list, g_top_list) = construct_renders(all_game_json)
+        area_list = b_top_list + b_area_list + b_side_list + g_top_list + g_area_list + g_side_list
+        pipe = g_rclient.pipeline()
+        for i in area_list:
+            pipe.get('area:' + i["id"])
+        all_areainfo = yield tornado.gen.Task(pipe.execute)
+        for i in range(len(all_areainfo)):
+            area_list[i]["value"] = all_areainfo[i]
+        self.render("admin_main.html", area_list = area_list, blog_arealist_json = all_blog_json, game_arealist_json = all_game_json)
 
-        side_list = []
-        side_list.append(area)
-        side_list.append(area2)
-        side_list.append(area3)
+class AdminDoorHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    @tornado.gen.engine
+    def post(self, action):
+        if action == "add_post":
+            postid  = self.get_argument('postid')
+            preview = self.get_argument('preview')
+            area    = self.get_argument('area')
+            post    = self.get_argument('post')
 
-        self.render("admin_main.html", area_list = area_list, side_list = side_list, top_list = side_list)
+            pipe = g_rclient.pipeline()
+            pipe.get('area:' + area)
+            [area_list_json,] = yield tornado.gen.Task(pipe.execute)
+            area_list = json.loads(area_list_json)
+            area_list.insert(0, postid)
+            new_area_list_json = json.dumps(area_list)
+
+            pipe = g_rclient.pipeline()
+            pipe.set('area:' + area, new_area_list_json)
+            pipe.set('prev:' + postid, preview)
+            pipe.set('post:' + postid, post)
+            result = yield tornado.gen.Task(pipe.execute)
+
+            self.finish("<script>alert('Success');</script>")
+
+        elif action == "add_area":
+            areaid   = self.get_argument('areaid')
+            areaname = self.get_argument('areaname')
+            type     = self.get_argument('type')
+            section  = self.get_argument('section')
+
+            area_info = {}
+            area_info["id"]   = areaid
+            area_info["name"]   = areaname
+            area_info["type"]   = int(type)
+
+            pipe = g_rclient.pipeline()
+            pipe.get(section + ':arealist')
+            [section_list_json,] = yield tornado.gen.Task(pipe.execute)
+
+            section_list = json.loads(section_list_json)
+            section_list.insert(0, area_info)
+            new_section_list = json.dumps(section_list)
+
+            pipe = g_rclient.pipeline()
+            pipe.set(section + ':arealist', new_section_list)
+            pipe.set('area:' + areaid,  "[]")
+            result = yield tornado.gen.Task(pipe.execute)
+
+            self.finish("<script>alert('Success');</script>")
+
+        elif action == "set_blog_arealist":
+            areainfo = self.get_argument('areainfo')
+            pipe = g_rclient.pipeline()
+            pipe.set('blog:arealist', areainfo)
+            result = yield tornado.gen.Task(pipe.execute)
+
+            self.finish("<script>alert('Success');</script>")
+
+        elif action == "set_game_arealist":
+            areainfo = self.get_argument('areainfo')
+            pipe = g_rclient.pipeline()
+            pipe.set('game:arealist', areainfo)
+            result = yield tornado.gen.Task(pipe.execute)
+
+            self.finish("<script>alert('Success');</script>")
+
+        elif action == "set_areainfo":
+            areaid   = self.get_argument('areaid')
+            areainfo = self.get_argument('areainfo')
+
+            pipe = g_rclient.pipeline()
+            pipe.set('area:' + areaid, areainfo)
+            result = yield tornado.gen.Task(pipe.execute)
+
+            self.finish("<script>alert('Success');</script>")
+        else:
+            self.finish("<script>alert('Invalid action');</script>")

@@ -25,11 +25,7 @@
       <div class="collapse navbar-collapse" id="main-menu"> 
        <ul class="menu"> 
        {% for top in top_list %}
-        {% if top['current'] == True %}
-         <li class="nav-current" role="presentation"><a href="./blog/area/{{ top['id'] }}">{{ top['name'] }}</a></li> 
-        {% else %}
-         <li role="presentation"><a href="./blog/area/{{ top['id'] }}">{{ top['name'] }}</a></li> 
-        {% end %}
+         <li role="presentation"><a href="/blog/area/{{ top['id'] }}">{{ top['name'] }}</a></li> 
        {% end %}
        </ul> 
       </div> 
@@ -40,9 +36,7 @@
   <div class="container">
     <div class="row">
       <main class="col-md-12 main-content">
-       {% for post in post_list %}
-          {{ post }}         
-       {% end %}
+          {{ post_code }}
       </main>
     </div>
   </div>

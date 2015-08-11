@@ -24,13 +24,8 @@
       </div> 
       <div class="collapse navbar-collapse" id="main-menu"> 
        <ul class="menu"> 
-       {% for top in top_list %}
-        {% if top['current'] == True %}
-         <li class="nav-current" role="presentation"><a href="./blog/area/{{ top['id'] }}">{{ top['name'] }}</a></li> 
-        {% else %}
-         <li role="presentation"><a href="./blog/area/{{ top['id'] }}">{{ top['name'] }}</a></li> 
-        {% end %}
-       {% end %}
+         <li role="presentation"><a href="./blog/area">Test</a></li> 
+         <li role="presentation"><a href="./blog/area">Test</a></li> 
        </ul> 
       </div> 
      </div> 
@@ -50,9 +45,10 @@
           </div>
         </div>
         <div class="widget">
-         <h4 class="title"> 圣光之灵 </h4>
+         <h4 class="title"> 圣光の灵 </h4>
           <div class="content community">
           <div class="list-group">
+              <p><a id="p_manage_section" class="list-group-item"> 管理分区 </a></p>
               <p><a id="p_manage_area" class="list-group-item"> 管理分类 </a></p>
               <p><a id="p_manage_user" class="list-group-item"> 管理账号 </a></p>
               </div>
@@ -62,27 +58,29 @@
       <main id="main" class="col-md-9 main-content">
         <div id="m_add_post" class="panel panel-default">
           <div class="panel-body">
-            <form method="post" action="./nimda/add_post">
+            <form method="post" action="/nimda/add_post">
               <div class="form-group">
-                <label class="control-label" for="inputSuccess1">文章概览</label>
-                <textarea class="form-control" rows="2"></textarea>
+                <label class="control-label" for="InputPostId">文章ID</label>
+                <textarea class="form-control" rows="1" name="postid"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="inputPreview">文章概览</label>
+                <textarea class="form-control" rows="2" name="preview"></textarea>
               </div>
                <div class="form-group">
                 <button type="button" class="btn">预览</button>
                </div>
               <div class="form-group">
               <label class="control-label" for="inputSuccess1">文章分类</label>
-              <select class="form-control">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
+              <select class="form-control" name="area">
+                {% for area in area_list %}
+                 <option value="{{ area["id"] }}"> {{ area["name"] }}</option>
+                {% end %}
               </select>
               </div>
               <div class="form-group">
               <label class="control-label" for="inputSuccess1">文章正文</label>
-              <textarea class="form-control" rows="5"></textarea>
+              <textarea class="form-control" rows="5" name="post"></textarea>
               </div>
               <div class="form-group">
                 <button type="button" class="btn">预览</button>
@@ -92,19 +90,100 @@
                 <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
               </div>
               <div class="form-group">
-                <button type="button" class="btn btn-danger">提交</button>
+                <button type="submit" class="btn btn-danger">提交</button>
                </div>
             </form>
           </div>
         </div>
         <div id="m_add_area" class="panel panel-default">
           <div class="panel-body">
-            2www.asdfsadfasdf.com
+            <form method="post" action="/nimda/add_area">
+              <div class="form-group">
+                <label class="control-label" for="InputAreaId">分类ID</label>
+                <textarea class="form-control" rows="1" name="areaid"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="InputAreaName">分类名</label>
+                <textarea class="form-control" rows="1" name="areaname"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="InputType">类型</label>
+                <div class="radio">
+                 <label>
+                   <input type="radio" name="type" id="section" value="0" checked>
+                   普通分类
+                 </label>
+               </div>
+                <div class="radio">
+                 <label>
+                   <input type="radio" name="type" id="section" value="1">
+                    分栏
+                 </label>
+               </div>
+                <div class="radio">
+                 <label>
+                   <input type="radio" name="type" id="section" value="-1">
+                    专栏
+                 </label>
+               </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="InputSection">分区</label>
+                <div class="radio">
+                 <label>
+                   <input type="radio" name="section" id="section" value="blog" checked>
+                    博客区
+                 </label>
+               </div>
+                <div class="radio">
+                 <label>
+                   <input type="radio" name="section" id="section" value="game">
+                   游戏区 
+                 </label>
+               </div>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-danger">提交</button>
+               </div>
+            </form>
+          </div>
+        </div>
+        <div id="m_manage_section" class="panel panel-default">
+          <div class="panel-body">
+            <form method="post" action="/nimda/set_blog_arealist">
+              <div class="form-group">
+                <label class="control-label" for="InputBlogArealist">博客区分类列表</label>
+                <textarea class="form-control" rows="10" name="areainfo">{{ blog_arealist_json }}</textarea>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-danger">提交</button>
+               </div>
+            </form>
+            <form method="post" action="/nimda/set_game_arealist">
+              <div class="form-group">
+                <label class="control-label" for="InputGameArealist">游戏区分类列表</label>
+                <textarea class="form-control" rows="10" name="areainfo">{{ game_arealist_json }}</textarea>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-danger">提交</button>
+               </div>
+            </form>
           </div>
         </div>
         <div id="m_manage_area" class="panel panel-default">
           <div class="panel-body">
-            3www.asdfsadfasdf.com
+            {% for area in area_list %}
+            <form method="post" action="/nimda/set_areainfo">
+              <div class="form-group">
+               <input type="hidden" name="areaid" value="{{ area['id'] }}"/>
+               <label class="control-label" for="InputAreainfo"> {{ area["name"] }} </label>
+               <textarea class="form-control" rows="1" name="areainfo">{{ area["value"] }}</textarea>
+               <div class="form-group">
+                 <button type="submit" class="btn btn-danger">提交</button>
+               </div>
+              </div>
+            </form>
+            {% end %}
           </div>
         </div>
         <div id="m_manage_user" class="panel panel-default">
@@ -122,9 +201,20 @@
   var p_active_now = "#p_add_post";
   var m_active_now = "#m_add_post";
   $("#m_add_area").hide();
+  $("#m_manage_section").hide();
   $("#m_manage_area").hide();
   $("#m_manage_user").hide();
    $(document).ready(function() {
+      /* $("#b_manage_post").click(function() {
+          $.getJSON("/get_post_json/" + $("#t_manage_post").val(), function(post) {
+            if (post["prevcode"] == null || post["postcode"] == null) {
+                alert("!");
+            } else {
+                console.debug(post);
+            }
+          });
+
+      }); */
       $("#p_add_post").click(function() {
           $(m_active_now).fadeToggle();
           $(p_active_now).removeClass("active");
@@ -146,6 +236,14 @@
           $(p_active_now).removeClass("active");
           p_active_now = "#p_manage_area";
           m_active_now = "#m_manage_area";
+          $(m_active_now).fadeToggle();
+          $(p_active_now).addClass("active");
+      });
+      $("#p_manage_section").click(function() {
+          $(m_active_now).fadeToggle();
+          $(p_active_now).removeClass("active");
+          p_active_now = "#p_manage_section";
+          m_active_now = "#m_manage_section";
           $(m_active_now).fadeToggle();
           $(p_active_now).addClass("active");
       });
