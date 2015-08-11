@@ -27,13 +27,14 @@
          <li role="presentation"><a href="/"> 回到主页 </a></li> 
          <li role="presentation"><a href="/nimda"> 源码模式 </a></li> 
          <li role="presentation"><a href="/nimda_light"> 轻量模式 </a></li> 
+         <li role="presentation" id="b_exit_preview"><a href="javascript:void(0)"> 退出预览 </a></li> 
        </ul> 
       </div> 
      </div> 
     </div> 
    </div>
   </nav>
-  <div class="container">
+  <div class="container" id="editor_page">
     <div class="row">
       <aside class="col-md-3 sidebar">
         <div class="widget">
@@ -66,10 +67,10 @@
               </div>
               <div class="form-group">
                 <label class="control-label" for="inputPreview">文章概览</label>
-                <textarea class="form-control" rows="2" name="preview"></textarea>
+                <textarea class="form-control" rows="2" name="preview" id="t_preview_code"></textarea>
               </div>
                <div class="form-group">
-                <button type="button" class="btn">预览</button>
+                <button type="button" class="btn" id="b_preview_postpreview">预览</button>
                </div>
               <div class="form-group">
               <label class="control-label" for="inputSuccess1">文章分类</label>
@@ -81,10 +82,10 @@
               </div>
               <div class="form-group">
               <label class="control-label" for="inputSuccess1">文章正文</label>
-              <textarea class="form-control" rows="5" name="post"></textarea>
+              <textarea class="form-control" rows="5" name="post" id="t_post_code"></textarea>
               </div>
               <div class="form-group">
-                <button type="button" class="btn">预览</button>
+                <button type="button" class="btn" id="b_preview_post">预览</button>
                </div>
                <div class="form-group">
                 <label for="exampleInputPassword1">身份验证码</label>
@@ -211,6 +212,37 @@
       </main>
     </div>
   </div>
+  <div class="container" id="preview_postpreview_page">
+    <div class="row">
+       <main class="col-md-8 main-content" id="preview_postpreview_main"> 
+       </main>
+       <aside class="col-md-4 sidebar">
+        <div class="widget">
+         <h4 class="title">博客专栏</h4>
+          <div class="content community">
+            {% for side in side_list %}
+              <p><a href="/blog/area/{{ side['id'] }}"> {{ side['name'] }}</a></p>
+            {% end %}
+          </div>
+        </div>
+        <div class="widget">
+         <h4 class="title">所有分类</h4>
+          <div class="content community">
+            {% for area in co_area_list %}
+              <p><a href="/blog/area/{{ area['id'] }}"> {{ area['name'] }}</a></p>
+            {% end %}
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <div class="container" id="preview_post_main">
+    <div class="row">
+       <main class="col-md-8 main-content" id="preview_postpreview_main"> 
+       </main>
+    </div>
+  </div>
+  
   {% include "footer_line.html" %}
   {% include "footer_js.html" %}
   {% include "latex_js.html" %}
@@ -221,10 +253,16 @@
   }
   var p_active_now = "#p_add_post";
   var m_active_now = "#m_add_post";
+  var m_last_active = "";
+  var m_now_preview = "";
   $("#m_add_area").hide();
   $("#m_manage_section").hide();
   $("#m_manage_area").hide();
   $("#m_manage_user").hide();
+  $("#b_exit_preview").hide();
+
+  $("#preview_post_main").hide();
+  $("#preview_postpreview_page").hide();
    $(document).ready(function() {
       /* $("#b_manage_post").click(function() {
           $.getJSON("/get_post_json/" + $("#t_manage_post").val(), function(post) {
@@ -236,6 +274,27 @@
           });
 
       }); */
+
+      $("#b_exit_preview").click(function() {
+          $("#editor_page").fadeToggle();
+          $(m_now_preview).fadeToggle();
+          $("#b_exit_preview").fadeToggle();
+      });
+      $("#b_preview_postpreview").click(function() {
+          $("#editor_page").fadeToggle();
+          m_now_preview = "#preview_postpreview_page";
+          $("#preview_postpreview_main").html($("#t_preview_code").val())
+          $(m_now_preview).fadeToggle();
+          $("#b_exit_preview").fadeToggle();
+      });
+      $("#b_preview_post").click(function() {
+          $("#editor_page").fadeToggle();
+          m_now_preview = "#preview_post_page";
+          $("#preview_post_main").html($("#t_post_code").val())
+          $(m_now_preview).fadeToggle();
+          $("#b_exit_preview").fadeToggle();
+      });
+
       $("#p_add_post").click(function() {
           $(m_active_now).fadeToggle();
           $(p_active_now).removeClass("active");

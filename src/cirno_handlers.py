@@ -132,7 +132,7 @@ class AdminMainHandler(tornado.web.RequestHandler):
         all_areainfo = yield tornado.gen.Task(pipe.execute)
         for i in range(len(all_areainfo)):
             area_list[i]["value"] = all_areainfo[i]
-        self.render("admin_main.html", area_list = area_list, blog_arealist_json = all_blog_json, game_arealist_json = all_game_json, mode = mode)
+        self.render("admin_main.html", area_list = area_list, co_area_list = b_area_list, side_list = b_side_list, blog_arealist_json = all_blog_json, game_arealist_json = all_game_json, mode = mode)
 
 class AdminDoorHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
