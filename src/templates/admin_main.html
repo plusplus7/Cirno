@@ -24,8 +24,9 @@
       </div> 
       <div class="collapse navbar-collapse" id="main-menu"> 
        <ul class="menu"> 
-         <li role="presentation"><a href="./blog/area">Test</a></li> 
-         <li role="presentation"><a href="./blog/area">Test</a></li> 
+         <li role="presentation"><a href="/"> 回到主页 </a></li> 
+         <li role="presentation"><a href="/nimda"> 源码模式 </a></li> 
+         <li role="presentation"><a href="/nimda_light"> 轻量模式 </a></li> 
        </ul> 
       </div> 
      </div> 
@@ -87,7 +88,7 @@
                </div>
                <div class="form-group">
                 <label for="exampleInputPassword1">身份验证码</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Password">
               </div>
               <div class="form-group">
                 <button type="submit" class="btn btn-danger">提交</button>
@@ -142,6 +143,10 @@
                  </label>
                </div>
               </div>
+               <div class="form-group">
+                <label for="exampleInputPassword1">身份验证码</label>
+                <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Password">
+              </div>
               <div class="form-group">
                 <button type="submit" class="btn btn-danger">提交</button>
                </div>
@@ -155,6 +160,10 @@
                 <label class="control-label" for="InputBlogArealist">博客区分类列表</label>
                 <textarea class="form-control" rows="10" name="areainfo">{{ blog_arealist_json }}</textarea>
               </div>
+               <div class="form-group">
+                <label for="exampleInputPassword1">身份验证码</label>
+                <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Password">
+              </div>
               <div class="form-group">
                 <button type="submit" class="btn btn-danger">提交</button>
                </div>
@@ -163,6 +172,10 @@
               <div class="form-group">
                 <label class="control-label" for="InputGameArealist">游戏区分类列表</label>
                 <textarea class="form-control" rows="10" name="areainfo">{{ game_arealist_json }}</textarea>
+              </div>
+               <div class="form-group">
+                <label for="exampleInputPassword1">身份验证码</label>
+                <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Password">
               </div>
               <div class="form-group">
                 <button type="submit" class="btn btn-danger">提交</button>
@@ -177,7 +190,11 @@
               <div class="form-group">
                <input type="hidden" name="areaid" value="{{ area['id'] }}"/>
                <label class="control-label" for="InputAreainfo"> {{ area["name"] }} </label>
-               <textarea class="form-control" rows="1" name="areainfo">{{ area["value"] }}</textarea>
+               <textarea class="form-control" rows="5" name="areainfo">{{ area["value"] }}</textarea>
+               <div class="form-group">
+                <label for="exampleInputPassword1">身份验证码</label>
+                <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Password">
+              </div>
                <div class="form-group">
                  <button type="submit" class="btn btn-danger">提交</button>
                </div>
@@ -188,7 +205,7 @@
         </div>
         <div id="m_manage_user" class="panel panel-default">
           <div class="panel-body">
-            4www.asdfsadfasdf.com
+            你以为我会开放账号管理功能？等我找到女朋友再说！
           </div>
         </div>
       </main>
@@ -198,6 +215,10 @@
   {% include "footer_js.html" %}
   {% include "latex_js.html" %}
   <script type="text/javascript">
+  var editor_mode  = "{{ mode }}";
+  if (editor_mode != "raw") {
+      alert(editor_mode + "模式正在建设中...");
+  }
   var p_active_now = "#p_add_post";
   var m_active_now = "#m_add_post";
   $("#m_add_area").hide();

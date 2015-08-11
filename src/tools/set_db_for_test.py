@@ -37,7 +37,7 @@ common_prev = """<article id="52" class="post tag-laravel-5-1 tag-artisan">
 ba = json.loads(blog_arealist)
 ga = json.loads(game_arealist)
 
-r.set("user:plusplus7", "asdf")
+r.set("user:plusplus7", "asdfasdfasdfasdf")
 r.set("blog:arealist", json.dumps(ba, indent = 1))
 r.set("game:arealist", json.dumps(ga, indent = 1))
 for sba in ba:
