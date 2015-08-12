@@ -1,4 +1,6 @@
 import tornado.web
+import tornado.options
+import logging
 import tornado.ioloop
 import os
 from cirno_handlers import *
@@ -25,6 +27,10 @@ settings = {
 }
 
 def main(host="0.0.0.0", port=8080):
+    tornado.options.parse_command_line()
+    access_log = logging.getLogger("tornado.access")
+    app_log = logging.getLogger("tornado.application")
+    gen_log = logging.getLogger("tornado.general")
     app = tornado.web.Application(urls, **settings)
     app.listen(port, host)
     tornado.ioloop.IOLoop.instance().start()
