@@ -1,0 +1,58 @@
+{% autoescape None %}
+<html>
+ <head> 
+ {% include "header.html" %}
+ {% include "header_css.html" %}
+ </head> 
+ <body class="home-template"> 
+  <header class="main-header"> 
+   <div class="container"> 
+    <div class="row"> 
+     <div class="col-sm-12"> 
+      <h1>plusplus7's blog</h1>  
+      <h3>Life is tough, take it easy : )</h3> 
+     </div> 
+    </div> 
+   </div> 
+  </header> 
+  <nav class="main-navigation"> 
+   <div class="container"> 
+    <div class="row"> 
+     <div class="col-sm-12"> 
+      <div class="navbar-header"> 
+       <span class="nav-toggle-button collapsed" data-toggle="collapse" data-target="#main-menu"> <span class="sr-only">Toggle navigation</span> <i class="fa fa-bars"></i> </span> 
+      </div> 
+      <div class="collapse navbar-collapse" id="main-menu"> 
+       <ul class="menu"> 
+       {% for top in top_list %}
+         <li role="presentation"><a href="/blog/area/{{ top['id'] }}">{{ top['name'] }}</a></li> 
+       {% end %}
+       </ul> 
+      </div> 
+     </div> 
+    </div> 
+   </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <main class="col-md-12 main-content">
+        <article id="52" class="post tag-laravel-5-1 tag-artisan">
+          <header class="post-head">
+            <h1 class="post-title">本页还在建设中...</h1>
+              <section class="post-meta">
+                <span class="author">作者：<a href="/author/plusplus7/">plusplus7</a></span> &bull;
+                <time class="post-date">2015年8月7日</time>
+              </section>
+               <section class="post-content">
+               <h2>plusplus7.com新版本正在开发中，目测会在周末上线。。。。</h2>
+               </section>
+          </header>
+        </article>
+       </main>
+    </div>
+  </div>
+  {% include "footer_line.html" %}
+  {% include "footer_js.html" %}
+  {% include "latex_js.html" %}
+ </body>
+</html>

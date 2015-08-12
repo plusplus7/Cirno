@@ -1,0 +1,47 @@
+{% autoescape None %}
+<html>
+ <head> 
+ {% include "header.html" %}
+ {% include "header_css.html" %}
+ </head> 
+ <body class="home-template"> 
+  <header class="main-header"> 
+   <div class="container"> 
+    <div class="row"> 
+     <div class="col-sm-12"> 
+      <h1>plusplus7's blog</h1>  
+      <h3>Life is tough, take it easy : )</h3> 
+     </div> 
+    </div> 
+   </div> 
+  </header> 
+  <nav class="main-navigation"> 
+   <div class="container"> 
+    <div class="row"> 
+     <div class="col-sm-12"> 
+      <div class="navbar-header"> 
+       <span class="nav-toggle-button collapsed" data-toggle="collapse" data-target="#main-menu"> <span class="sr-only">Toggle navigation</span> <i class="fa fa-bars"></i> </span> 
+      </div> 
+      <div class="collapse navbar-collapse" id="main-menu"> 
+       <ul class="menu"> 
+       {% for top in top_list %}
+         <li role="presentation"><a href="/blog/area/{{ top['id'] }}">{{ top['name'] }}</a></li> 
+       {% end %}
+       </ul> 
+      </div> 
+     </div> 
+    </div> 
+   </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <main class="col-md-12 main-content">
+          {{ post_code }}
+      </main>
+    </div>
+  </div>
+  {% include "footer_line.html" %}
+  {% include "footer_js.html" %}
+  {% include "latex_js.html" %}
+ </body>
+</html>
