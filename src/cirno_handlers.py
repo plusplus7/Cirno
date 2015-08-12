@@ -64,7 +64,6 @@ class BlogIndexHandler(tornado.web.RequestHandler):
         for doc in area_info_list[0:5]:
             pipe.get('prev:' + doc)
         prev_list = yield tornado.gen.Task(pipe.execute)
-        print prev_list
 
         self.render("blog_index.html", area_list = area_list, prev_list = prev_list, side_list = side_list, top_list = top_list)
 
