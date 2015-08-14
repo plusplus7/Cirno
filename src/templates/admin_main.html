@@ -279,6 +279,7 @@
   var editor_mode  = "{{ mode }}";
   if (editor_mode != "raw") {
       alert(editor_mode + "模式正在建设中...");
+      window.history.back(-1);
   }
   var p_active_now = "#p_add_post";
   var m_active_now = "#m_add_post";
