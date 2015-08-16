@@ -15,7 +15,6 @@ urls = [
     (r'/nimda/(?P<action>[a-zA-Z0-9-_]+)', AdminDoorHandler),
     (r'/storage', StorageIndexHandler),
     (r'/aboutme', AboutmeIndexHandler),
-    (r'.*', StorageIndexHandler),
 ]
 
 settings = {

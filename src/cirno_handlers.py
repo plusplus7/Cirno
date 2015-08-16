@@ -145,14 +145,15 @@ class AdminDoorHandler(tornado.web.RequestHandler):
             post    = self.get_argument('post')
 
             pipe = g_rclient.pipeline()
-            pipe.get('area:' + area)
-            [area_list_json,] = yield tornado.gen.Task(pipe.execute)
-            area_list = json.loads(area_list_json)
-            area_list.insert(0, postid)
-            new_area_list_json = json.dumps(area_list)
+            if cmp(area, "NoArea") != 0:
+                pipe_area = g_rclient.pipeline()
+                pipe_area.get('area:' + area)
+                [area_list_json,] = yield tornado.gen.Task(pipe_area.execute)
+                area_list = json.loads(area_list_json)
+                area_list.insert(0, postid)
+                new_area_list_json = json.dumps(area_list)
+                pipe.set('area:' + area, new_area_list_json)
 
-            pipe = g_rclient.pipeline()
-            pipe.set('area:' + area, new_area_list_json)
             pipe.set('prev:' + postid, preview)
             pipe.set('post:' + postid, post)
             result = yield tornado.gen.Task(pipe.execute)
