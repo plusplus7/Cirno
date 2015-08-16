@@ -67,7 +67,23 @@
               </div>
               <div class="form-group">
                 <label class="control-label" for="inputPreview">文章概览</label>
-                <textarea class="form-control" rows="2" name="preview" id="t_preview_code"></textarea>
+                <textarea class="form-control" rows="2" name="preview" id="t_preview_code">
+                  <article id="52" class="post tag-laravel-5-1 tag-artisan">
+                    <div class="post-head">
+                      <h1 class="post-title"><a href="/blog/post/[文章ID]">[文章标题]</a></h1>
+                      <div class="post-meta">
+                        <span class="author">作者：<a href="http://plusplus7.com/blog">[作者名字]</a></span> •
+                        <time class="post-date">[时间戳]</time>
+                      </div>
+                    </div>
+                    <div class="post-content">
+                      <p> [概览内容] </p>
+                    </div>
+                    <div class="post-permalink">
+                      <a href="/blog/post/[文章ID]" class="btn btn-default">阅读全文</a>
+                    </div>
+                    </article>
+                </textarea>
               </div>
                <div class="form-group">
                 <button type="button" class="btn" id="b_preview_postpreview">预览</button>
@@ -78,11 +94,25 @@
                 {% for area in area_list %}
                  <option value="{{ area["id"] }}"> {{ area["name"] }}</option>
                 {% end %}
+                 <option value="NoArea"> 暂不添加分类 <option>
               </select>
               </div>
               <div class="form-group">
               <label class="control-label" for="inputSuccess1">文章正文</label>
-              <textarea class="form-control" rows="5" name="post" id="t_post_code"></textarea>
+              <textarea class="form-control" rows="5" name="post" id="t_post_code">
+                <article id="52" class="post tag-laravel-5-1 tag-artisan">
+                    <div class="post-head">
+                      <h1 class="post-title"><a href="/blog/post/[文章ID]">[文章标题]</a></h1>
+                      <div class="post-meta">
+                        <span class="author">作者：<a href="plusplus7.com/blog">[作者名字]</a></span> •
+                        <time class="post-date">[时间戳]</time>
+                      </div>
+                    </div>
+                    <div class="post-content">
+                      <p> [正文内容] </p>
+                    </div>
+                </article>
+              </textarea>
               </div>
               <div class="form-group">
                 <button type="button" class="btn" id="b_preview_post">预览</button>
@@ -250,6 +280,7 @@
   var editor_mode  = "{{ mode }}";
   if (editor_mode != "raw") {
       alert(editor_mode + "模式正在建设中...");
+      window.history.back(-1);
   }
   var p_active_now = "#p_add_post";
   var m_active_now = "#m_add_post";
@@ -289,7 +320,7 @@
       });
       $("#b_preview_post").click(function() {
           $("#editor_page").fadeToggle();
-          m_now_preview = "#preview_post_page";
+          m_now_preview = "#preview_post_main";
           $("#preview_post_main").html($("#t_post_code").val())
           $(m_now_preview).fadeToggle();
           $("#b_exit_preview").fadeToggle();

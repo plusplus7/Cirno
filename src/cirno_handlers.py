@@ -88,10 +88,11 @@ class StorageIndexHandler(tornado.web.RequestHandler):
     def get(self):
         pipe = g_rclient.pipeline()
         pipe.get('blog:arealist')
-        [all_area_json,] = yield tornado.gen.Task(pipe.execute)
+        pipe.get('post:storage')
+        [all_area_json, post_code] = yield tornado.gen.Task(pipe.execute)
         (area_list, side_list, top_list) = construct_renders(all_area_json)
 
-        self.render("storage_index.html", top_list = top_list)
+        self.render("blog_main.html", post_code = post_code, top_list = top_list)
 
 class AboutmeIndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
@@ -99,21 +100,12 @@ class AboutmeIndexHandler(tornado.web.RequestHandler):
     def get(self):
         pipe = g_rclient.pipeline()
         pipe.get('blog:arealist')
-        [all_area_json,] = yield tornado.gen.Task(pipe.execute)
+        pipe.get('post:aboutme')
+        [all_area_json, post_code] = yield tornado.gen.Task(pipe.execute)
         (area_list, side_list, top_list) = construct_renders(all_area_json)
 
-        self.render("about_me.html", top_list = top_list)
+        self.render("blog_main.html", post_code = post_code, top_list = top_list)
         
-class GetPostJsonHandler(tornado.web.RequestHandler):
-    @tornado.web.asynchronous
-    @tornado.gen.engine
-    def get(self, post_id):
-        pipe = g_rclient.pipeline()
-        pipe.get('post:' + post_id)
-        pipe.get('prev:' + post_id)
-        prevcode, postcode = yield tornado.gen.Task(pipe.execute)
-        self.finish(json.dumps({"prevcode" : prevcode, "postcode" : postcode}))
-
 class AdminMainHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     @tornado.gen.engine
@@ -143,9 +135,8 @@ class AdminDoorHandler(tornado.web.RequestHandler):
         [res, ] = yield tornado.gen.Task(pipe.execute)
         code, result = check_password(password, res)
         if  code == False:
-            self.finish("<script>alert('%s');window.location = '/nimda';</script>" % result)
+            self.finish("<script>alert('%s');window.history.back(-1);</script>" % result)
             return
-            
 
         if action == "add_post":
             postid  = self.get_argument('postid')
@@ -154,19 +145,18 @@ class AdminDoorHandler(tornado.web.RequestHandler):
             post    = self.get_argument('post')
 
             pipe = g_rclient.pipeline()
-            pipe.get('area:' + area)
-            [area_list_json,] = yield tornado.gen.Task(pipe.execute)
-            area_list = json.loads(area_list_json)
-            area_list.insert(0, postid)
-            new_area_list_json = json.dumps(area_list)
+            if cmp(area, "NoArea") != 0:
+                pipe_area = g_rclient.pipeline()
+                pipe_area.get('area:' + area)
+                [area_list_json,] = yield tornado.gen.Task(pipe_area.execute)
+                area_list = json.loads(area_list_json)
+                area_list.insert(0, postid)
+                new_area_list_json = json.dumps(area_list)
+                pipe.set('area:' + area, new_area_list_json)
 
-            pipe = g_rclient.pipeline()
-            pipe.set('area:' + area, new_area_list_json)
             pipe.set('prev:' + postid, preview)
             pipe.set('post:' + postid, post)
             result = yield tornado.gen.Task(pipe.execute)
-
-            self.finish("<script>alert('Success');window.location = '/nimda';</script>")
 
         elif action == "add_area":
             areaid   = self.get_argument('areaid')
@@ -192,23 +182,17 @@ class AdminDoorHandler(tornado.web.RequestHandler):
             pipe.set('area:' + areaid,  "[]")
             result = yield tornado.gen.Task(pipe.execute)
 
-            self.finish("<script>alert('Success');window.location = '/nimda';</script>")
-
         elif action == "set_blog_arealist":
             areainfo = self.get_argument('areainfo')
             pipe = g_rclient.pipeline()
             pipe.set('blog:arealist', areainfo)
             result = yield tornado.gen.Task(pipe.execute)
 
-            self.finish("<script>alert('Success');window.location = '/nimda';</script>")
-
         elif action == "set_game_arealist":
             areainfo = self.get_argument('areainfo')
             pipe = g_rclient.pipeline()
             pipe.set('game:arealist', areainfo)
             result = yield tornado.gen.Task(pipe.execute)
-
-            self.finish("<script>alert('Success');window.location = '/nimda';</script>")
 
         elif action == "set_areainfo":
             areaid   = self.get_argument('areaid')
@@ -217,7 +201,7 @@ class AdminDoorHandler(tornado.web.RequestHandler):
             pipe = g_rclient.pipeline()
             pipe.set('area:' + areaid, areainfo)
             result = yield tornado.gen.Task(pipe.execute)
-
-            self.finish("<script>alert('Success');window.location = '/nimda';</script>")
         else:
-            self.finish("<script>alert('Invalid action');window.location = '/nimda';</script>")
+            self.finish("<script>alert('Invalid action');window.history.back(-1);</script>")
+
+        self.finish("<script>alert('Success');window.history.back(-1);</script>")
