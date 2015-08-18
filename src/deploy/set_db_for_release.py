@@ -3,11 +3,15 @@ import json
 import redis
 import sys
 
-r = redis.Redis()
-r.auth(sys.argv[1])
+r = redis.Redis(password=sys.argv[1])
 r.flushall()
 
-temp_post = """"
+temp_arealist = """
+[  
+    {"id" : "index", "type":1,"name":"首页"}
+]"""
+
+temp_post = """
 <article class="post tag-laravel-5-1 tag-artisan">
 <div class="post-head">
 <h1 class="post-title"><a href="/blog/post/%s">云服务器ECS</a></h1>
@@ -25,5 +29,6 @@ temp_post = """"
 r.set("user:plusplus7", sys.argv[2])
 r.set("post:aboutme", temp_post % "aboutme")
 r.set("post:storage", temp_post % "storage")
-r.set("blog:arealist", json.dumps("[]", indent = 1))
-r.set("game:arealist", json.dumps("[]", indent = 1))
+r.set("blog:arealist", temp_arealist)
+r.set("game:arealist", temp_arealist)
+r.set("area:index", json.dumps([], indent = 1))
