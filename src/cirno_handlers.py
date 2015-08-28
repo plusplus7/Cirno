@@ -61,7 +61,7 @@ class BlogIndexHandler(tornado.web.RequestHandler):
         if area_info_json == None:
             self.render("error_page.html", error_info = "该分类不存在", top_list = top_list)
         area_info_list = json.loads(area_info_json)
-        for doc in area_info_list[0:5]:
+        for doc in area_info_list[0:100]:
             pipe.get('prev:' + doc)
         prev_list = yield tornado.gen.Task(pipe.execute)
 
@@ -74,13 +74,15 @@ class BlogMainHandler(tornado.web.RequestHandler):
         pipe = g_rclient.pipeline()
         pipe.get('blog:arealist')
         pipe.get('post:' + post_id)
-        all_area_json, post_code = yield tornado.gen.Task(pipe.execute)
+        pipe.incr('view:' + post_id)
+        pipe.get('view:' + post_id)
+        all_area_json, post_code, incr, post_count = yield tornado.gen.Task(pipe.execute)
         (area_list, side_list, top_list) = construct_renders(all_area_json)
 
         if post_code == None:
             self.render("error_page.html", error_info = "该文章不存在", top_list = top_list)
 
-        self.render("blog_main.html", post_code = post_code, top_list = top_list)
+        self.render("blog_main.html", post_id = post_id, post_code = post_code, top_list = top_list, post_count = post_count)
 
 class StorageIndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
