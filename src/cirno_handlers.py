@@ -10,6 +10,7 @@ import tornadoredis
 
 g_rclient = tornadoredis.Client()
 g_rclient.connect()
+g_rclient.auth("asdffdsaasdffdsa")
 
 def check_password(ciphertext, password):
     if ciphertext == None or password == None:
@@ -90,11 +91,13 @@ class StorageIndexHandler(tornado.web.RequestHandler):
     def get(self):
         pipe = g_rclient.pipeline()
         pipe.get('blog:arealist')
+        pipe.incr('view:storage')
+        pipe.get('view:storage')
         pipe.get('post:storage')
-        [all_area_json, post_code] = yield tornado.gen.Task(pipe.execute)
+        [all_area_json, ncr, post_count, post_code] = yield tornado.gen.Task(pipe.execute)
         (area_list, side_list, top_list) = construct_renders(all_area_json)
 
-        self.render("blog_main.html", post_code = post_code, top_list = top_list)
+        self.render("blog_main.html", post_id = "storage", post_code = post_code, top_list = top_list, post_count = post_count)
 
 class AboutmeIndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
@@ -102,11 +105,13 @@ class AboutmeIndexHandler(tornado.web.RequestHandler):
     def get(self):
         pipe = g_rclient.pipeline()
         pipe.get('blog:arealist')
+        pipe.incr('view:aboutme')
+        pipe.get('view:aboutme')
         pipe.get('post:aboutme')
-        [all_area_json, post_code] = yield tornado.gen.Task(pipe.execute)
+        [all_area_json, incr, post_count, post_code] = yield tornado.gen.Task(pipe.execute)
         (area_list, side_list, top_list) = construct_renders(all_area_json)
 
-        self.render("blog_main.html", post_code = post_code, top_list = top_list)
+        self.render("blog_main.html", post_id = "aboutme", post_code = post_code, top_list = top_list, post_count = post_count)
         
 class AdminMainHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
