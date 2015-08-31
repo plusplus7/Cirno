@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mysterious Space</title>
+    <style>
+        .redid { color : red;}
+        .greenid { color : green;}
+    </style>
+    <script>
+        function changeColor(divid,id)
+        {
+            document.getElementById(divid).className=id;
+        }
+        function startGame(str)
+        {
+            window.location.href=str;
+        }
+    </script>
+</head>
+<body>
+    <p align="center"><img src="images/top.jpg"/></p>
+    
+    <p align="center">A game of easy program based on WebGL</p>
+    <p align="center">Chrome or firefox. IE is buxing</p>
+    <p align="center" id="handle">How to control: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                      Key W : forward &nbsp;&nbsp;<br/>
+                      Key S : Back &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                      Key A : Left &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                      Key D : Right &nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                      Key Q : Look left <br/>
+                      Key E : Look right<br/>
+    </p>
+    <div id="clickid" class="redid" onclick="startGame('game.html');" onmouseover="changeColor('clickid','greenid');" onmouseout="changeColor('clickid','redid');">
+        <h1><p align="center">Click to start an easy puzzle!</p></h1>
+    </div>
+    <div id="clickid1" class="redid" onclick="startGame('game1.html');" onmouseover="changeColor('clickid1','greenid');" onmouseout="changeColor('clickid1','redid');">
+        <h1><p align="center">Click to start an unsolvable puzzle!</p></h1>
+    </div>
+</body>
+</html>

@@ -24,6 +24,7 @@
       </div> 
       <div class="collapse navbar-collapse" id="main-menu"> 
        <ul class="menu"> 
+         <li role="presentation"><a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;主&nbsp;&nbsp;页</a></li>
        {% for top in top_list %}
          <li role="presentation"><a href="/blog/area/{{ top['id'] }}">{{ top['name'] }}</a></li> 
        {% end %}
