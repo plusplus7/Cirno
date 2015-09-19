@@ -17,7 +17,7 @@ common_areainfo = """
 ]
 """
 blog_arealist = common_arealist.replace("common", "blog")
-game_arealist = common_arealist.replace("common", "game").replace("生活", "游戏")
+game_arealist = common_arealist.replace("common", "game").replace("生活", "游戏").replace("index", "gameindex")
 common_prev = """<article id="52" class="post tag-laravel-5-1 tag-artisan">
 <div class="post-head">
 <h1 class="post-title"><a href="/blog/post/%s">云服务器ECS</a></h1>
