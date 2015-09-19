@@ -1,0 +1,73 @@
+{% autoescape None %}
+<html>
+ <head> 
+ {% include "header.html" %}
+ {% include "header_css.html" %}
+ </head> 
+ <body class="home-template"> 
+  <header class="main-header"> 
+   <div class="container"> 
+    <div class="row"> 
+     <div class="col-sm-12"> 
+      <h1>plusplus7's blog</h1>  
+      <h3>Life is tough, take it easy : )</h3> 
+     </div> 
+    </div> 
+   </div> 
+  </header> 
+  <nav class="main-navigation"> 
+   <div class="container"> 
+    <div class="row"> 
+     <div class="col-sm-12"> 
+      <div class="navbar-header"> 
+       <span class="nav-toggle-button collapsed" data-toggle="collapse" data-target="#main-menu"> <span class="sr-only">Toggle navigation</span> <i class="fa fa-bars"></i> </span> 
+      </div> 
+      <div class="collapse navbar-collapse" id="main-menu"> 
+       <ul class="menu"> 
+         <li role="presentation"><a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;主&nbsp;&nbsp;页</a></li>
+       {% for top in top_list %}
+         <li role="presentation"><a href="/game/area/{{ top['id'] }}">{{ top['name'] }}</a></li> 
+       {% end %}
+       </ul> 
+      </div> 
+     </div> 
+    </div> 
+   </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <main class="col-md-12 main-content">
+          {{ post_code }}
+      </main>
+      <main class="col-md-12 main-content">
+        <div class="post-content">
+        本文阅读量: {{ post_count }}
+        </div>
+      </main>
+      <div class="col-md-1"></div>
+      <div class="col-md-10">
+      <!-- 多说评论框 start -->
+        <div class="ds-thread" data-thread-key="{{ post_id }}" data-title="plusplus7个人主页" data-url="http://plusplus7.com/game/post/{{ post_id }}"></div>
+        <!-- 多说评论框 end -->
+        <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+        <script type="text/javascript">
+        var duoshuoQuery = {short_name:"lemonbook"};
+            (function() {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript';ds.async = true;
+                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0] 
+                || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+        </script>
+        <!-- 多说公共JS代码 end -->
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+  </div>
+  {% include "footer_line.html" %}
+  {% include "footer_js.html" %}
+  {% include "latex_js.html" %}
+ </body>
+</html>

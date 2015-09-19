@@ -7,6 +7,9 @@ from cirno_handlers import *
 
 urls = [
     (r'/', IndexHandler),
+    (r'/game', GameIndexHandler),
+    (r'/game/area/(?P<area_id>[a-zA-Z0-9-_]+)', GameIndexHandler),
+    (r'/game/post/(?P<post_id>[a-zA-Z0-9-_]+)', GameMainHandler),
     (r'/blog', BlogIndexHandler),
     (r'/blog/area/(?P<area_id>[a-zA-Z0-9-_]+)', BlogIndexHandler),
     (r'/blog/post/(?P<post_id>[a-zA-Z0-9-_]+)', BlogMainHandler),
