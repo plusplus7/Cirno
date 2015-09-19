@@ -88,7 +88,7 @@ class BlogMainHandler(tornado.web.RequestHandler):
 class GameIndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     @tornado.gen.engine
-    def get(self, area_id = "index"):
+    def get(self, area_id = "gameindex"):
         pipe = g_rclient.pipeline()
         pipe.get('game:arealist')
         pipe.get('area:' + area_id)
