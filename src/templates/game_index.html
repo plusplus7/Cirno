@@ -26,8 +26,10 @@
        <ul class="menu"> 
          <li role="presentation"><a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;主&nbsp;&nbsp;页</a></li>
        {% for top in top_list %}
-         <li role="presentation"><a href="/blog/area/{{ top['id'] }}">{{ top['name'] }}</a></li> 
+         <li role="presentation"><a href="/game/area/{{ top['id'] }}">{{ top['name'] }}</a></li> 
        {% end %}
+         <li role="presentation"><a href="http://space.bilibili.com/1438242" target="_blank">Bilibili空间</a></li>
+         <li role="presentation"><a href="http://i.youku.com/u/UMTQ0MjcxMzI=" target="_blank">优酷空间</a></li>
        </ul> 
       </div> 
      </div> 
@@ -43,10 +45,10 @@
       </main>
       <aside class="col-md-4 sidebar">
         <div class="widget">
-         <h4 class="title">博客专栏</h4>
+         <h4 class="title">视频专栏</h4>
           <div class="content community">
             {% for side in side_list %}
-              <p><a href="/blog/area/{{ side['id'] }}"> {{ side['name'] }}</a></p>
+              <p><a href="/game/area/{{ side['id'] }}"> {{ side['name'] }}</a></p>
             {% end %}
           </div>
         </div>
@@ -54,26 +56,15 @@
          <h4 class="title">所有分类</h4>
           <div class="content community">
             {% for area in area_list %}
-              <p><a href="/blog/area/{{ area['id'] }}"> {{ area['name'] }}</a></p>
+              <p><a href="/game/area/{{ area['id'] }}"> {{ area['name'] }}</a></p>
             {% end %}
           </div>
         </div>
-        <div class="widget">
-         <h4 class="title">友情链接</h4>
-          <div class="content community">
-          <p><a href="http://blog.csdn.net/sssogs/">ACM/ICPC解题报告</a><br/></p>
-          <p><a href="http://fluyy.net">FLUYY</a><br/></p>
-          <p><a href="http://lenny.sinaapp.com/">LENNY</a><br/></p>
-          <p><a href="http://acm.cuit.edu.cn/">CUIT ACM校队</a><br/></p>
-          <p><a href="http://www.linkgod.net/">LinkGod</a><br/></p>
-          <p><a href="http://joychou.org/">JoyChou</a><br/></p>
-          </div>
-          </div>
       </aside>
     </div>
   </div>
-{% include "footer_line.html" %}
-{% include "footer_js.html" %}
-{% include "latex_js.html" %}
-</body>
+  {% include "footer_line.html" %}
+  {% include "footer_js.html" %}
+  {% include "latex_js.html" %}
+ </body>
 </html>

@@ -10,6 +10,7 @@ import tornadoredis
 
 g_rclient = tornadoredis.Client()
 g_rclient.connect()
+g_rclient.auth("asdffdsaasdffdsa")
 
 def check_password(ciphertext, password):
     if ciphertext == None or password == None:
@@ -61,7 +62,7 @@ class BlogIndexHandler(tornado.web.RequestHandler):
         if area_info_json == None:
             self.render("error_page.html", error_info = "该分类不存在", top_list = top_list)
         area_info_list = json.loads(area_info_json)
-        for doc in area_info_list[0:5]:
+        for doc in area_info_list[0:100]:
             pipe.get('prev:' + doc)
         prev_list = yield tornado.gen.Task(pipe.execute)
 
@@ -74,25 +75,64 @@ class BlogMainHandler(tornado.web.RequestHandler):
         pipe = g_rclient.pipeline()
         pipe.get('blog:arealist')
         pipe.get('post:' + post_id)
-        all_area_json, post_code = yield tornado.gen.Task(pipe.execute)
+        pipe.incr('view:' + post_id)
+        pipe.get('view:' + post_id)
+        all_area_json, post_code, incr, post_count = yield tornado.gen.Task(pipe.execute)
         (area_list, side_list, top_list) = construct_renders(all_area_json)
 
         if post_code == None:
             self.render("error_page.html", error_info = "该文章不存在", top_list = top_list)
 
-        self.render("blog_main.html", post_code = post_code, top_list = top_list)
+        self.render("blog_main.html", post_id = post_id, post_code = post_code, top_list = top_list, post_count = post_count)
+
+class GameIndexHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    @tornado.gen.engine
+    def get(self, area_id = "gameindex"):
+        pipe = g_rclient.pipeline()
+        pipe.get('game:arealist')
+        pipe.get('area:' + area_id)
+        all_area_json, area_info_json = yield tornado.gen.Task(pipe.execute)
+        (area_list, side_list, top_list) = construct_renders(all_area_json)
+
+        if area_info_json == None:
+            self.render("error_page.html", error_info = "该分类不存在", top_list = top_list)
+        area_info_list = json.loads(area_info_json)
+        for doc in area_info_list[0:100]:
+            pipe.get('prev:' + doc)
+        prev_list = yield tornado.gen.Task(pipe.execute)
+
+        self.render("game_index.html", area_list = area_list, prev_list = prev_list, side_list = side_list, top_list = top_list)
+
+class GameMainHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    @tornado.gen.engine
+    def get(self, post_id):
+        pipe = g_rclient.pipeline()
+        pipe.get('game:arealist')
+        pipe.get('post:' + post_id)
+        pipe.incr('view:' + post_id)
+        pipe.get('view:' + post_id)
+        all_area_json, post_code, incr, post_count = yield tornado.gen.Task(pipe.execute)
+        (area_list, side_list, top_list) = construct_renders(all_area_json)
+
+        if post_code == None:
+            self.render("error_page.html", error_info = "该文章不存在", top_list = top_list)
+
+        self.render("game_main.html", post_id = post_id, post_code = post_code, top_list = top_list, post_count = post_count)
+
 
 class StorageIndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     @tornado.gen.engine
     def get(self):
         pipe = g_rclient.pipeline()
-        pipe.get('blog:arealist')
+        pipe.incr('view:storage')
+        pipe.get('view:storage')
         pipe.get('post:storage')
-        [all_area_json, post_code] = yield tornado.gen.Task(pipe.execute)
-        (area_list, side_list, top_list) = construct_renders(all_area_json)
+        [ncr, post_count, post_code] = yield tornado.gen.Task(pipe.execute)
 
-        self.render("blog_main.html", post_code = post_code, top_list = top_list)
+        self.render("storage_index.html", post_id = "storage", post_code = post_code, post_count = post_count)
 
 class AboutmeIndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
@@ -100,11 +140,13 @@ class AboutmeIndexHandler(tornado.web.RequestHandler):
     def get(self):
         pipe = g_rclient.pipeline()
         pipe.get('blog:arealist')
+        pipe.incr('view:aboutme')
+        pipe.get('view:aboutme')
         pipe.get('post:aboutme')
-        [all_area_json, post_code] = yield tornado.gen.Task(pipe.execute)
+        [all_area_json, incr, post_count, post_code] = yield tornado.gen.Task(pipe.execute)
         (area_list, side_list, top_list) = construct_renders(all_area_json)
 
-        self.render("blog_main.html", post_code = post_code, top_list = top_list)
+        self.render("blog_main.html", post_id = "aboutme", post_code = post_code, top_list = top_list, post_count = post_count)
         
 class AdminMainHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous

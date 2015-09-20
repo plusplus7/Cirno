@@ -25,8 +25,9 @@
       <div class="collapse navbar-collapse" id="main-menu"> 
        <ul class="menu"> 
          <li role="presentation"><a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;主&nbsp;&nbsp;页</a></li>
-         <li role="presentation"><a href="/static/mysterious_space/index.html">迷宫游戏</a></li>
-         <li role="presentation"><a href="http://rctrl.plusplus7.com">远程控制中心</a></li>
+       {% for top in top_list %}
+         <li role="presentation"><a href="/game/area/{{ top['id'] }}">{{ top['name'] }}</a></li> 
+       {% end %}
        </ul> 
       </div> 
      </div> 
@@ -46,7 +47,7 @@
       <div class="col-md-1"></div>
       <div class="col-md-10">
       <!-- 多说评论框 start -->
-        <div class="ds-thread" data-thread-key="{{ post_id }}" data-title="plusplus7个人主页" data-url="http://plusplus7.com/blog/post/{{ post_id }}"></div>
+        <div class="ds-thread" data-thread-key="{{ post_id }}" data-title="plusplus7个人主页" data-url="http://plusplus7.com/game/post/{{ post_id }}"></div>
         <!-- 多说评论框 end -->
         <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
         <script type="text/javascript">

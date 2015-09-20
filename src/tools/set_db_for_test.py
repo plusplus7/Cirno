@@ -17,7 +17,7 @@ common_areainfo = """
 ]
 """
 blog_arealist = common_arealist.replace("common", "blog")
-game_arealist = common_arealist.replace("common", "game")
+game_arealist = common_arealist.replace("common", "game").replace("生活", "游戏").replace("index", "gameindex")
 common_prev = """<article id="52" class="post tag-laravel-5-1 tag-artisan">
 <div class="post-head">
 <h1 class="post-title"><a href="/blog/post/%s">云服务器ECS</a></h1>
@@ -49,5 +49,5 @@ for sba in ba:
 
 for sga in ga:
     r.set("area:" + sga["id"], common_areainfo % ("post" + sga["id"]))
-    r.set("post:" + "post" + sga["id"], common_prev.decode('UTF-8') % ("post" + sga["id"]))
-    r.set("prev:" + "post" + sga["id"], common_prev.decode('UTF-8') % ("post" + sga["id"]))
+    r.set("post:" + "post" + sga["id"], (common_prev.decode('UTF-8') % ("post" + sga["id"])).replace("blog/post", "game/post"))
+    r.set("prev:" + "post" + sga["id"], (common_prev.decode('UTF-8') % ("post" + sga["id"])).replace("blog/post", "game/post"))

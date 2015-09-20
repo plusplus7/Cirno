@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+    Mysterious Space WelGL Version
+</title>
+<style>body {
+    margin: 0px;
+    background-color: #000000;
+    overflow: hidden;
+}</style>
+<script src="http://threejs.org/build/three.min.js"></script>
+<script src="http://threejs.org/examples/js/libs/stats.min.js"></script>
+<script src="http://threejs.org/examples/fonts/helvetiker_regular.typeface.js"></script>
+<script>
+    var scene,camera,renderer,light,mazeh,mazew,maze;
+    var KEY_A=65,PRESS_A;
+    var KEY_S=83,PRESS_S;
+    var KEY_W=87,PRESS_W;
+    var KEY_D=68,PRESS_D;
+    var KEY_Q=81,PRESS_Q;
+    var KEY_E=69,PRESS_E;
+    function onWindowResize() {
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize( window.innerWidth, window.innerHeight );
+
+    }
+    function initGame()
+    {
+
+        PRESS_A=false;
+        PRESS_S=false;
+        PRESS_W=false;
+        PRESS_D=false;
+        PRESS_Q=false;
+        PRESS_E=false;
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
+        renderer = new THREE.WebGLRenderer();
+        light = new THREE.DirectionalLight( 0xffffff );
+        //This maze is simple.Automazer may be added later after the ver.beta .
+        mazeh = 50;
+        mazew = 50;
+        maze = ["**************************************************",
+            "*..S..*...*.....*.*.*...*.*.*.........*...*...*.**",
+            "**.*.....*.*...*.*.....*.*.*.*.*...*.*.*.....*.*.*",
+            "*...................*.......*.*...........*...*..*",
+            "**.*.*.*...*.*...*...*...*.....*.*...*.....*...*.*",
+            "*...*...*...*...*...*.....*.......*.*.*.*.*...*.**",
+            "*....*...*.*.*...*.......*...*.*.*...*.....*...*.*",
+            "*.*.*.....*.*...*.....*.*.......*.*.*.*.*...*.*..*",
+            "*..*...*...*.....*.....*.*.....*.*.*.*.*...*.....*",
+            "*.......*.*...*...*.*...*...*.*.....*.*.*...*.*..*",
+            "*..*...*.*.*.*.*.*...*...*.*.......*.*.*.*.*.*...*",
+            "*...*...*.*.*.*.....*...*.*...*.*...*.*.....*.*.**",
+            "**.*...*.*.*.....*...*.*...*.....*...*...*.......*",
+            "*.....*...*.*...*...*.*.*...*...*.*.......*.*...**",
+            "**.*.....*.*...*.*.....*...*.......*.*.*.*.....*.*",
+            "*...*.......*...*...*.....*...*.*...*...*.....*..*",
+            "**...*...*.*.....*.*...*.*...*.*.*.*.*.....*...*.*",
+            "*.....*.*.*.*.*.....*.*.........*...*.*.....*....*",
+            "**.........*.*.*.*.*...*...*.....*.......*...*.*.*",
+            "*...*...*.*.*.*.*...*.....*...*.*...*.*...*...*..*",
+            "**.*.......*.*...*.....*.*.*...*.*.....*.........*",
+            "*...*.*.*.*.*...*.....*.*.*.....*...*.*...*.*...**",
+            "**...*.....*.*.....*.*...*.*.*.*.*.*.....*.*...*.*",
+            "*.*.*...*.*.*...*.....*.*...*.*.*.....*...*.*.*.**",
+            "**.....*.*.*.*...*...*...*.*.*.*...*.*.*.*.....*.*",
+            "*.*.*...*...*...*.........*.....*.*.*...*.*.....**",
+            "**.*...*.....*...*.*.....*...*.........*...*.*.*.*",
+            "*.*.*.*...*.*.*...*...*...*.*.....*...*.*.....*..*",
+            "**.*.*.*...*.........*.*.....*.....*.*...*...*...*",
+            "*.*.*...*.....*.*.......*.*.*.*.*...*...*.*......*",
+            "*....*.....*...*.*.....*.*...*.*.*.*...*.*...*.*.*",
+            "*.....*.*.*.........*...*.*...*.*.*.*.*.*.*.*...**",
+            "**...*.*.*...*.*.*.*.*.*...*...*.*.....*...*...*.*",
+            "*.....*.*...*.*.*.*.......*.*...*...*...*.*.*.*..*",
+            "*..*.*...*.....*.*...*...*.*...*...*.*.*.........*",
+            "*...*...*.....*.*.*...*.................*...*.*.**",
+            "*....*.*.*.*.......*.*...*...*.*...*...*.*.......*",
+            "*.*.*.*.*.*.*.*.*.*.......*.*.*.....*.....*.*.*.**",
+            "*..*.....................*.......*.*.*.........*.*",
+            "*.*...*...*.*.....*.*.*.*.*.*.*.......*.*.*.*....*",
+            "*..*...*.*.*.*...*.*...*.......*...*.....*...*...*",
+            "*.*.*.......*...*.........*.*.......*.*..........*",
+            "**.*.*.*.....*.....*...*.....*...*...*.*.*.*...*.*",
+            "*...*.*...*.*.....*.*.*...*.*...*...*...*.*.*....*",
+            "*....*.*.*.......*.....*.*.*.*.*.*.*.*.......*...*",
+            "*.*.*...*.*.*.*.....*.*.*.....*.*.*.*...........**",
+            "*..*...*...*.*.*...*.*...*.*.....*.*.*.*.*...*...*",
+            "*.....*...*.*...........*.*...*...*.*...*.*...*..*",
+            "**...*.....*.*.....*.*.*.....*.......*.*.*.E.*.*.*",
+            "**************************************************"];
+        BoxTexture = THREE.ImageUtils.loadTexture( "images/crate.gif" );
+        BoxMaterial = new THREE.MeshBasicMaterial( { map: BoxTexture } );
+        var text3d = new THREE.TextGeometry( "E", {
+
+            size: 80,
+            height: 10,
+            curveSegments: 40,
+
+
+        });
+        var textMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff, overdraw: true } );
+        text = new THREE.Mesh( text3d, textMaterial );
+
+        var LineMaterial = new THREE.LineBasicMaterial({
+            color: 0x0000ff
+        });
+        for (i=0; i<2500; i+=50)
+        {
+
+            var geometry = new THREE.Geometry();
+            geometry.vertices.push( new THREE.Vector3( i, 0, 0) );
+            geometry.vertices.push( new THREE.Vector3( i, 0, 2500 ) );
+
+            var line = new THREE.Line( geometry, LineMaterial );
+            scene.add( line );
+        }
+        for (i=0; i<2500; i+=50)
+        {
+
+
+            var geometry = new THREE.Geometry();
+            geometry.vertices.push( new THREE.Vector3( 0, 0, i) );
+            geometry.vertices.push( new THREE.Vector3( 2500, 0, i ) );
+
+            var line = new THREE.Line( geometry, LineMaterial );
+            scene.add( line );
+        }
+        for (i=0; i<mazeh; i++)
+        {
+            for (j=0; j<mazew; j++)
+            {
+                if (maze[i][j] == '*')
+                {
+                    Box = new THREE.Mesh(new THREE.BoxGeometry( 50, 50, 50 ),BoxMaterial);
+                    Box.position.x=25+i*50;
+                    Box.position.y=25;
+                    Box.position.z=25+j*50;
+                    scene.add(Box);
+                }
+                if (maze[i][j] == 'S')
+                {
+                    camera.position.x=25+i*50;
+                    camera.position.z=25+j*50;
+                }
+                if (maze[i][j] == 'E')
+                {
+
+
+
+
+                    text.position.x = 25+i*50;
+                    text.position.z = 25+j*50;
+
+                    text.rotation.y = Math.PI * 2;
+
+                    group = new THREE.Object3D();
+                    group.add( text );
+
+                    scene.add( group );
+                }
+            }
+        }
+        camera.position.y=60;
+
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( renderer.domElement );
+
+        light.position.set( 0, 1, 0 );
+        scene.add(light);
+
+
+
+        BoxTexture.anisotropy = renderer.getMaxAnisotropy();
+
+        window.addEventListener( 'resize', onWindowResize, false );
+        window.addEventListener( 'keydown',onkeydown,false);
+        window.addEventListener( 'keyup',onkeyup,false);
+
+
+
+    }
+    var time=new Date().getTime();
+    function onkeyup()
+    {
+        if (event.keyCode == KEY_A)
+            PRESS_A=false;//camera.position.x--;
+        if (event.keyCode == KEY_D)
+            PRESS_D=false;//camera.position.x++;
+        if (event.keyCode == KEY_W)
+            PRESS_W=false;//camera.position.z--;
+        if (event.keyCode == KEY_S)
+            PRESS_S=false;//camera.position.z++;
+        if (event.keyCode == KEY_Q)
+            PRESS_Q=false;
+        if (event.keyCode == KEY_E)
+            PRESS_E=false;
+    }
+
+    function onkeydown()
+    {
+        if (event.keyCode == KEY_A)
+            PRESS_A=true;//camera.position.x--;
+        if (event.keyCode == KEY_D)
+            PRESS_D=true;//camera.position.x++;
+        if (event.keyCode == KEY_W)
+            PRESS_W=true;//camera.position.z--;
+        if (event.keyCode == KEY_S)
+            PRESS_S=true;//camera.position.z++;
+        if (event.keyCode == KEY_Q)
+            PRESS_Q=true;//camera.position.z++;
+        if (event.keyCode == KEY_E)
+            PRESS_E=true;//camera.position.z++;
+    }
+    function getMazeType()
+    {
+        return maze[parseInt(camera.position.x/50.0)][parseInt(camera.position.z/50.0)];
+    }
+    var loop=0;
+    function checkPass()
+    {
+        //console.info(camera.position.x+" "+camera.position.z+" "+getMazeType());
+
+        if (getMazeType() == 'E')
+        {
+            self.location.href="pass.html?passtime="+(new Date().getTime()-time);
+            window.cancelAnimationFrame(loop);
+        }
+    }
+    function playGame()
+    {
+        loop=window.requestAnimationFrame( playGame );
+        var tx=0,tz=0;
+        if (camera.rotation.y > Math.PI) camera.rotation.y-=Math.PI*2;
+        if (camera.rotation.y < -Math.PI) camera.rotation.y+=Math.PI*2;
+
+        if (PRESS_A) tx-=Math.sin(camera.rotation.y+Math.PI/2.0),tz-=Math.cos(camera.rotation.y+Math.PI/2.0);
+        if (PRESS_D) tx-=Math.sin(camera.rotation.y-Math.PI/2.0),tz-=Math.cos(camera.rotation.y-Math.PI/2.0);
+        if (PRESS_W) tx-=Math.sin(camera.rotation.y),tz-=Math.cos(camera.rotation.y);
+        if (PRESS_S) tx+=Math.sin(camera.rotation.y),tz+=Math.cos(camera.rotation.y);
+        if (PRESS_Q) camera.rotation.y+=0.03;
+        if (PRESS_E) camera.rotation.y-=0.03;
+
+        camera.position.x+=tx;
+        camera.position.z+=tz;
+        if (getMazeType() == '*')
+        {
+            camera.position.x-=tx;
+            camera.position.z-=tz;
+        }
+        text.rotation.y+=0.1;
+        checkPass();
+        renderer.render( scene, camera );
+    }
+
+</script>
+</head>
+<body>
+<script>
+    initGame();
+    playGame();
+</script>
+</body>
+</html>
