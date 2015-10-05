@@ -32,9 +32,26 @@ def create_ipindex(filename):
         reqlist.append(req)
     return ipindex, codeindex, reqlist
 
+def load_cache(filename):
+    try:
+        res = json.load(fp, open(filename, 'r'))
+        return res
+    except:
+        return {}
+
+def save_cache(data, filename):
+    try:
+        json.dump(data, open(filename, 'w'))
+    except:
+        pass
+
 def fetch_geography_info(ipindex):
+    cache = load_cache("ip.cache")
     ip_geo = {}
     for ip in ipindex.keys():
+        if ip in cache:
+            ip_geo[ip] = cache[ip]
+            continue
         url = "http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=" + ip
         try:
             data = urllib2.urlopen(url)
@@ -43,6 +60,8 @@ def fetch_geography_info(ipindex):
             ip_geo[ip] = data["country"] + "," + data["province"] + "," + data["city"]
         except Exception, e:
             ip_geo[ip] = e
+
+    save_cache(ip_geo, "ip.cache")
     return ip_geo
 
 def analysis(filename):
