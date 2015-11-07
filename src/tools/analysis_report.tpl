@@ -30,7 +30,7 @@
      <table class="table">
       <tr><td>Date</td><td>Time</td><td>Httpcode</td><td>Method</td><td>Url</td><td>IP</td><td>Latency</td></tr>
       {% for req in reqlist %}
-          <tr><td>{{ req["date"] }}</td><td>{{ req["time"] }}</td><td>{{ req["code"] }}</td><td>{{ req["method"] }}</td><td>{{ req["path"] }}</td><td>{{ req["ip"] }}</td><td>{{ req["latency"] }}</td></tr>
+          <tr><td>{{ req["date"] }}</td><td>{{ req["time"] }}</td><td>{{ req["code"] }}</td><td>{{ req["method"] }}</td><td>{{ req["path"] }}</td><td>{{ req["ip"] }}</td><td>{{ ip_geo[req["ip"]] }}</td><td>{{ req["latency"] }}</td></tr>
       {% end %}
      </table>
     </div>

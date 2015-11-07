@@ -13,6 +13,7 @@ def create_ipindex(filename):
         res = line.strip().replace("[", "").replace("]", "").replace("(", "").replace(")", "").split(" ")
         if len(res) != 9:
             print "LA fuzz: ", line
+            continue
         ip = res[7]
         code = res[4]
         if ip not in ipindex:

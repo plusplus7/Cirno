@@ -23,11 +23,11 @@ urls = [
 settings = {
     "static_path"   : os.path.join(os.path.dirname(__file__), "static"),
     "template_path" : os.path.join(os.path.dirname(__file__), "templates"),
-    "debug"         : True,
+    "debug"         : False,
     "gzip"          : True,
 }
 
-def main(host="0.0.0.0", port=8080):
+def main(host="0.0.0.0", port=80):
     tornado.options.parse_command_line()
     access_log = logging.getLogger("tornado.access")
     app_log = logging.getLogger("tornado.application")
