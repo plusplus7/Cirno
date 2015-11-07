@@ -134,6 +134,20 @@ class StorageIndexHandler(tornado.web.RequestHandler):
 
         self.render("storage_index.html", post_id = "storage", post_code = post_code, post_count = post_count)
 
+class DonationIndexHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    @tornado.gen.engine
+    def get(self):
+        pipe = g_rclient.pipeline()
+        pipe.get('blog:arealist')
+        pipe.incr('view:donation')
+        pipe.get('view:donation')
+        pipe.get('post:donation')
+        [all_area_json, incr, post_count, post_code] = yield tornado.gen.Task(pipe.execute)
+        (area_list, side_list, top_list) = construct_renders(all_area_json)
+
+        self.render("blog_main.html", post_id = "donation", post_code = post_code, top_list = top_list, post_count = post_count)
+
 class AboutmeIndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     @tornado.gen.engine

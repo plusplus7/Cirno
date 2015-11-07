@@ -17,6 +17,7 @@ urls = [
     (r'/nimda_(?P<mode>[a-zA-Z0-9-_]+)', AdminMainHandler),
     (r'/nimda/(?P<action>[a-zA-Z0-9-_]+)', AdminDoorHandler),
     (r'/storage', StorageIndexHandler),
+    (r'/donation', DonationIndexHandler),
     (r'/aboutme', AboutmeIndexHandler),
 ]
 
