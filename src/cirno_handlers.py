@@ -165,7 +165,7 @@ class AboutmeIndexHandler(tornado.web.RequestHandler):
 class AdminMainHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     @tornado.gen.engine
-    def get(self, mode = "raw"):
+    def get(self, mode = "raw", article = None):
         pipe = g_rclient.pipeline()
         pipe.get('blog:arealist')
         pipe.get('game:arealist')
@@ -179,7 +179,14 @@ class AdminMainHandler(tornado.web.RequestHandler):
         all_areainfo = yield tornado.gen.Task(pipe.execute)
         for i in range(len(all_areainfo)):
             area_list[i]["value"] = all_areainfo[i]
-        self.render("admin_main.html", area_list = area_list, co_area_list = b_area_list, side_list = b_side_list, blog_arealist_json = all_blog_json, game_arealist_json = all_game_json, mode = mode)
+        article_prev = None
+        article_post = None
+        if article != None:
+            pipe = g_rclient.pipeline()
+            pipe.get('prev:' + article)
+            pipe.get('post:' + article)
+            [article_prev, article_post] = yield tornado.gen.Task(pipe.execute)
+        self.render("admin_main.html", area_list = area_list, co_area_list = b_area_list, side_list = b_side_list, blog_arealist_json = all_blog_json, game_arealist_json = all_game_json, mode = mode, article_prev = article_prev, article_post = article_post, article = article)
 
 class AdminDoorHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous

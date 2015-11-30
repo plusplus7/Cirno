@@ -63,10 +63,17 @@
             <form method="post" action="/nimda/add_post">
               <div class="form-group">
                 <label class="control-label" for="InputPostId">文章ID</label>
-                <textarea class="form-control" rows="1" name="postid"></textarea>
+                {% if article != None %}
+                    <textarea class="form-control" rows="1" name="postid">{{ article }}</textarea>
+                {% else %}
+                    <textarea class="form-control" rows="1" name="postid"></textarea>
+                {% end %}
               </div>
               <div class="form-group">
                 <label class="control-label" for="inputPreview">文章概览</label>
+                {% if article_prev != None %}
+                <textarea class="form-control" rows="2" name="preview" id="t_preview_code">{{ article_prev }}</textarea>
+                {% else %}
                 <textarea class="form-control" rows="2" name="preview" id="t_preview_code">
                   <article id="52" class="post tag-laravel-5-1 tag-artisan">
                     <div class="post-head">
@@ -84,6 +91,7 @@
                     </div>
                     </article>
                 </textarea>
+                {% end %}
               </div>
                <div class="form-group">
                 <button type="button" class="btn" id="b_preview_postpreview">预览</button>
@@ -99,6 +107,9 @@
               </div>
               <div class="form-group">
               <label class="control-label" for="inputSuccess1">文章正文</label>
+                {% if article_post != None %}
+              <textarea class="form-control" rows="5" name="post" id="t_post_code">{{ article_post }}</textarea>
+                {% else %}
               <textarea class="form-control" rows="5" name="post" id="t_post_code">
                 <article id="52" class="post tag-laravel-5-1 tag-artisan">
                     <div class="post-head">
@@ -113,6 +124,7 @@
                     </div>
                 </article>
               </textarea>
+                {% end %}
               </div>
               <div class="form-group">
                 <button type="button" class="btn" id="b_preview_post">预览</button>

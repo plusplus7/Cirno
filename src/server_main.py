@@ -14,6 +14,7 @@ urls = [
     (r'/blog/area/(?P<area_id>[a-zA-Z0-9-_]+)', BlogIndexHandler),
     (r'/blog/post/(?P<post_id>[a-zA-Z0-9-_]+)', BlogMainHandler),
     (r'/nimda', AdminMainHandler),
+    (r'/nimda@(?P<article>[a-zA-Z0-9-_]+)', AdminMainHandler),
     (r'/nimda_(?P<mode>[a-zA-Z0-9-_]+)', AdminMainHandler),
     (r'/nimda/(?P<action>[a-zA-Z0-9-_]+)', AdminDoorHandler),
     (r'/storage', StorageIndexHandler),
