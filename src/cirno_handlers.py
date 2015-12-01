@@ -27,7 +27,7 @@ def check_password(ciphertext, password):
         else:
             return (False, "Too old password")
     except Exception, e:
-        return (False, str(e)) 
+        return (False, str(e))
 
     return (False, "Invalid password")
 
@@ -55,8 +55,8 @@ class BlogIndexHandler(tornado.web.RequestHandler):
             area_info_list = json.loads(area_info_json)
         except:
             self.render("error_page.html", error_info = "Not valid json string %s and %s" % (area_list, area_info_list))
-            return 
-            
+            return
+
         for doc in area_info_list[0:100]:
             pipe.get('prev:' + doc)
         prev_list = yield tornado.gen.Task(pipe.execute)
@@ -125,13 +125,13 @@ class GameMainHandler(tornado.web.RequestHandler):
 
         if all_area_json == None or post_code == None or incr == None or post_count == None:
             self.render("error_page.html", error_info = "该文章不存在")
-            return 
+            return
         area_list = []
         try:
             area_list = json.loads(all_area_json)
         except:
             self.render("error_page.html", error_info = "Not valid json string %s" % area_list)
-            return 
+            return
 
         self.render("game_main.html", post_id = post_id, post_code = post_code, top_list = area_list["top"], post_count = post_count)
 
@@ -160,13 +160,13 @@ class DonationIndexHandler(tornado.web.RequestHandler):
         [all_area_json, incr, post_count, post_code] = yield tornado.gen.Task(pipe.execute)
         if all_area_json == None or post_code == None or incr == None or post_count == None:
             self.render("error_page.html", error_info = "该文章不存在")
-            return 
+            return
         area_list = []
         try:
             area_list = json.loads(all_area_json)
         except:
             self.render("error_page.html", error_info = "Not valid json string %s" % area_list)
-            return 
+            return
 
         self.render("blog_main.html", post_id = "donation", post_code = post_code, top_list = area_list["top"], post_count = post_count)
 
@@ -182,16 +182,16 @@ class AboutmeIndexHandler(tornado.web.RequestHandler):
         [all_area_json, incr, post_count, post_code] = yield tornado.gen.Task(pipe.execute)
         if all_area_json == None or post_code == None or incr == None or post_count == None:
             self.render("error_page.html", error_info = "该文章不存在")
-            return 
+            return
         area_list = []
         try:
             area_list = json.loads(all_area_json)
         except:
             self.render("error_page.html", error_info = "Not valid json string %s" % area_list)
-            return 
+            return
 
         self.render("blog_main.html", post_id = "aboutme", post_code = post_code, top_list = area_list["top"], post_count = post_count)
-        
+
 class AdminMainHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     @tornado.gen.engine
@@ -202,7 +202,7 @@ class AdminMainHandler(tornado.web.RequestHandler):
         [all_blog_json, all_game_json] = yield tornado.gen.Task(pipe.execute)
         if all_blog_json == None or all_game_json == None:
             self.render("error_page.html", error_info = "Internal error")
-            return 
+            return
         blog_area_list = []
         game_area_list = []
         try:
@@ -210,7 +210,7 @@ class AdminMainHandler(tornado.web.RequestHandler):
             game_area_list = json.loads(all_game_json)
         except:
             self.render("error_page.html", error_info = "Not valid json string %s and %s" % (blog_area_list, game_area_list))
-            return 
+            return
 
         area_list = []
 
